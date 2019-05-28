@@ -1,5 +1,6 @@
 package edu.handong.csee.java.examples;
 
+import java.io.File;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -12,6 +13,7 @@ public class Runner {
 	String path;
 	boolean verbose;
 	boolean help;
+	boolean fullpath;
 
 	public static void main(String[] args) {
 
@@ -24,19 +26,33 @@ public class Runner {
 		Options options = createOptions();
 		
 		if(parseOptions(options, args)){
+			File file = new File(path);
+			String[] files = file.list();
 			if (help){
 				printHelp(options);
 				return;
 			}
 			
+			
 			// path is required (necessary) data so no need to have a branch.
 			System.out.println("You provided \"" + path + "\" as the value of the option p");
 			
+			
+			if (fullpath) {
+				System.out.println("Print out full path you provided: ");
+				System.out.println(path + "\n");
+			}
+			
 			// TODO show the number of files in the path
+			System.out.println("The number of files: " + files.length);
 			
 			if(verbose) {
 				
 				// TODO list all files in the path
+				System.out.println("List of path you provided:");
+				for (String existFile : files) {
+					System.out.println("\t" + existFile);
+				}
 				
 				System.out.println("Your program is terminated. (This message is shown because you turned on -v option!");
 			}
@@ -53,6 +69,7 @@ public class Runner {
 			path = cmd.getOptionValue("p");
 			verbose = cmd.hasOption("v");
 			help = cmd.hasOption("h");
+			fullpath = cmd.hasOption("f");
 
 		} catch (Exception e) {
 			printHelp(options);
@@ -80,6 +97,11 @@ public class Runner {
 				//.hasArg()     // this option is intended not to have an option value but just an option
 				.argName("verbose option")
 				//.required() // this is an optional option. So disabled required().
+				.build());
+		
+		// add options by using OptionBuilder
+		options.addOption(Option.builder("f").longOpt("fullpath")
+				.desc("Print out full path of the files in the directory.")
 				.build());
 		
 		// add options by using OptionBuilder
