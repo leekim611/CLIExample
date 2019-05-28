@@ -28,6 +28,7 @@ public class Runner {
 		if(parseOptions(options, args)){
 			File file = new File(path);
 			String[] files = file.list();
+			
 			if (help){
 				printHelp(options);
 				return;
@@ -39,8 +40,9 @@ public class Runner {
 			
 			
 			if (fullpath) {
+				String fullPath = file.getAbsolutePath();
 				System.out.println("Print out full path you provided: ");
-				System.out.println(path + "\n");
+				System.out.println(fullPath + "\n");
 			}
 			
 			// TODO show the number of files in the path
